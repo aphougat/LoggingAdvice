@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.springapp.mvc"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="loggingAdvice" class="com.springapp.mvc.advice.LoggingAdvice"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="loggingPointCut" expression="within(com.springapp.mvc.services..*)"/>
+        <aop:aspect ref="loggingAdvice">
+            <aop:around method="doLog" pointcut-ref="loggingPointCut"/>
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>
